@@ -3,6 +3,7 @@ import { fetchBuildings } from "./data/fetchWikidata";
 import { normalizeBuildings } from "./data/normalizeBuildings";
 import FilterBar from "./components/FilterBar";
 import BuildingGrid from "./components/BuildingGrid";
+import MapView from "./components/MapView";
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -80,13 +81,13 @@ function App() {
             </div>
         )}
         <h2>Prague Architectural Explorer</h2>
-
         <FilterBar
             buildings={buildings}
             filters={filters}
             setFilters={setFilters}
         />
-
+        {!loading && <MapView buildings={filtered} />}
+        
         <BuildingGrid buildings={filtered} />
     </div>);
 }
