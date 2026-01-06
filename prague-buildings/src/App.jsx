@@ -1,3 +1,4 @@
+import "./App.css";
 import { useEffect, useState } from "react";
 import { fetchBuildings } from "./data/fetchWikidata";
 import { normalizeBuildings } from "./data/normalizeBuildings";
@@ -86,34 +87,34 @@ function App() {
         }
     }, [filtered]);
 
-    return (<div style={{ padding: "20px" }}>
-        <h2>Prague Architectural Explorer</h2>
-        {loading && (
-            <div style={{ textAlign: "center", marginTop: "40px" }}>
-                <div className="spinner" />
-                <p>Loading buildings from Wikidata…</p>
-            </div>
-        )}
-        <FilterBar
-            buildings={buildings}
-            filters={filters}
-            setFilters={setFilters}
-        />
-        <div style={{ display: "flex", gap: "20px" }}>
-            <div style={{ flex: 2 }}>
-                <MapView
-                    buildings={filtered}
-                    selectedBuildingId={selectedBuildingId}
-                    onSelectBuilding={setSelectedBuildingId}
+    return (<div className="app">
+        <div className="header">
+            <h1>Prague Architectural Explorer</h1>
+            <div className="filter-row">
+                <FilterBar
+                    buildings={buildings}
+                    filters={filters}
+                    setFilters={setFilters}
                 />
-            </div>
-            <div style={{ flex: 1 }}>
-                {selectedBuilding ? (
-                    <BuildingDetailsCard building={selectedBuilding} />
-                ) : (
-                    <p>No building selected</p>
+                {loading && (
+                    <div className="spinner-container">
+                        <div className="spinner" />
+                        <p>Loading buildings from Wikidata…</p>
+                    </div>
                 )}
             </div>
+        </div>
+        <div className="main-content">
+            <MapView
+                buildings={filtered}
+                selectedBuildingId={selectedBuildingId}
+                onSelectBuilding={setSelectedBuildingId}
+            />
+            {selectedBuilding ? (
+                <BuildingDetailsCard building={selectedBuilding} />
+            ) : (
+                <p>No building selected</p>
+            )}
         </div>
     </div>);
 }

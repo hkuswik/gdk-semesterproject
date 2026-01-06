@@ -1,3 +1,5 @@
+import "./FilterBar.css";
+
 /**
  * year from/to
  * styles
@@ -14,8 +16,8 @@ export default function FilterBar({ buildings, filters, setFilters }) {
     ).sort();
 
     return (
-        <div style={{ marginBottom: "20px", display: "flex", gap: "15px" }}>
-            <div>
+        <div className="filter-bar">
+            <div className="filter-group">
                 <label>Year from</label><br />
                 <input
                     type="number"
@@ -28,7 +30,7 @@ export default function FilterBar({ buildings, filters, setFilters }) {
                 />
             </div>
 
-            <div>
+            <div className="filter-group">
                 <label>Year to</label><br />
                 <input
                     type="number"
@@ -41,7 +43,7 @@ export default function FilterBar({ buildings, filters, setFilters }) {
                 />
             </div>
 
-            <div>
+            <div className="filter-group">
                 <label>Style</label><br />
                 <select
                     value={filters.style}
@@ -57,7 +59,7 @@ export default function FilterBar({ buildings, filters, setFilters }) {
                 </select>
             </div>
 
-            <div>
+            <div className="filter-group">
                 <label>Architect</label><br />
                 <select
                     value={filters.architect}

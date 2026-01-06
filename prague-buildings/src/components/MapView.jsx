@@ -1,12 +1,13 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { parseWktPoint } from "../data/geoUtils.js";
+import "./MapView.css";
 
 export default function MapView({ buildings, selectedBuildingId, onSelectBuilding }) {
     return (
         <MapContainer
             center={[50.087, 14.421]}
             zoom={13}
-            style={{ height: "500px", width: "100%", marginBottom: "30px" }}
+            className="map-container"
         >
             <TileLayer
                 attribution='&copy; OpenStreetMap contributors'

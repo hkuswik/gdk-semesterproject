@@ -1,16 +1,12 @@
+import "./BuildingDetailsCard.css";
+
 export default function BuildingCard({ building }) {
     return (
-        <div style={{
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            padding: "10px",
-            width: "280px"
-        }}>
+        <div className="building-card">
             {building.image && (
                 <img
                     src={building.image}
                     alt={building.label}
-                    style={{ width: "100%", borderRadius: "6px" }}
                 />
             )}
 
