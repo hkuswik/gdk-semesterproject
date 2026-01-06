@@ -110,7 +110,5 @@ LIMIT 1300
     const headers = { "Accept": "application/sparql-results+json" };
 
     const response = await fetch(url, { headers });
-    const data = await response.json();
-
-    return data;
+    return await response.json();
 }

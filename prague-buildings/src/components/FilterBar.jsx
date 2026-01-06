@@ -19,10 +19,11 @@ export default function FilterBar({ buildings, filters, setFilters }) {
                 <label>Year from</label><br />
                 <input
                     type="number"
+                    placeholder="e.g., 1800"
                     value={filters.yearFrom}
                     onChange={e => setFilters(f => ({
                         ...f,
-                        yearFrom: Number(e.target.value)
+                        yearFrom: e.target.value
                     }))}
                 />
             </div>
@@ -31,10 +32,11 @@ export default function FilterBar({ buildings, filters, setFilters }) {
                 <label>Year to</label><br />
                 <input
                     type="number"
+                    placeholder="e.g., 2026"
                     value={filters.yearTo}
                     onChange={e => setFilters(f => ({
                         ...f,
-                        yearTo: Number(e.target.value)
+                        yearTo: e.target.value
                     }))}
                 />
             </div>

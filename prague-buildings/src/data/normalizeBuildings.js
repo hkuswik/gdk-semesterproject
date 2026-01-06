@@ -1,3 +1,5 @@
+import { normalizeStyle } from "./styleNormalizer.js";
+
 export function normalizeBuildings(sparqlJson) {
     return sparqlJson.results.bindings.map(b => ({
         id: b.building.value,
@@ -13,7 +15,11 @@ export function normalizeBuildings(sparqlJson) {
             ? b.architects.value.split(", ")
             : [],
         styles: b.styles?.value
-            ? b.styles.value.split(", ")
+            ? Array.from(new Set(
+                b.styles.value
+                    .split(", ")
+                    .map(normalizeStyle)
+            ))
             : [],
         image: b.image?.value ?? null,
     }));
