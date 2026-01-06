@@ -2,13 +2,18 @@ import { useEffect, useState } from "react";
 import { fetchBuildings } from "./data/fetchWikidata";
 import { normalizeBuildings } from "./data/normalizeBuildings";
 import FilterBar from "./components/FilterBar";
-import BuildingGrid from "./components/BuildingGrid";
 import MapView from "./components/MapView";
+import BuildingDetailsCard from "./components/BuidingDetailsCard.jsx";
 
 function App() {
     const [loading, setLoading] = useState(true);
     const [buildings, setBuildings] = useState([]);
     const [filtered, setFiltered] = useState([]);
+    const [selectedBuildingId, setSelectedBuildingId] = useState(null);
+
+    const selectedBuilding = filtered.find(
+        b => b.id === selectedBuildingId
+    );
 
     const [filters, setFilters] = useState({
         yearFrom: "",
@@ -73,22 +78,43 @@ function App() {
         setFiltered(result);
     }, [filters, buildings]);
 
+    useEffect(() => {
+        if (filtered.length > 0) {
+            setSelectedBuildingId(filtered[0].id);
+        } else {
+            setSelectedBuildingId(null);
+        }
+    }, [filtered]);
+
     return (<div style={{ padding: "20px" }}>
+        <h2>Prague Architectural Explorer</h2>
         {loading && (
             <div style={{ textAlign: "center", marginTop: "40px" }}>
                 <div className="spinner" />
                 <p>Loading buildings from Wikidata…</p>
             </div>
         )}
-        <h2>Prague Architectural Explorer</h2>
         <FilterBar
             buildings={buildings}
             filters={filters}
             setFilters={setFilters}
         />
-        {!loading && <MapView buildings={filtered} />}
-        
-        <BuildingGrid buildings={filtered} />
+        <div style={{ display: "flex", gap: "20px" }}>
+            <div style={{ flex: 2 }}>
+                <MapView
+                    buildings={filtered}
+                    selectedBuildingId={selectedBuildingId}
+                    onSelectBuilding={setSelectedBuildingId}
+                />
+            </div>
+            <div style={{ flex: 1 }}>
+                {selectedBuilding ? (
+                    <BuildingDetailsCard building={selectedBuilding} />
+                ) : (
+                    <p>No building selected</p>
+                )}
+            </div>
+        </div>
     </div>);
 }
 

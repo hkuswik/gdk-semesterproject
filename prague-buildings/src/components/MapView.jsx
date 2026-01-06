@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { parseWktPoint } from "../data/geoUtils.js";
 
-export default function MapView({ buildings }) {
+export default function MapView({ buildings, selectedBuildingId, onSelectBuilding }) {
     return (
         <MapContainer
             center={[50.087, 14.421]}
@@ -17,12 +17,19 @@ export default function MapView({ buildings }) {
                 const pos = parseWktPoint(b.coords);
                 if (!pos) return null;
 
+                const isSelected = b.id === selectedBuildingId;
+
                 return (
-                    <Marker key={b.id} position={pos}>
+                    <Marker
+                        key={b.id}
+                        position={pos}
+                        eventHandlers={{
+                            click: () => onSelectBuilding(b.id)
+                        }}
+                        opacity={isSelected ? 1 : 0.6}
+                    >
                         <Popup>
-                            <strong>{b.label}</strong><br />
-                            {b.year && <>Year: {b.year}<br /></>}
-                            {b.styles.join(", ")}
+                            <strong>{b.label}</strong>
                         </Popup>
                     </Marker>
                 );
