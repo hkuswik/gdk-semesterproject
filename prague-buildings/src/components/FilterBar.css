@@ -4,6 +4,10 @@
     gap: 15px;
 }
 
+.filter-group {
+    width: 50%;
+}
+
 .filter-group label {
     font-weight: 500;
 }
