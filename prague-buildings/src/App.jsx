@@ -1,4 +1,5 @@
 import "./App.css";
+import "./components/BuildingDetailsCard.css";
 import { useEffect, useMemo, useState } from "react";
 import { fetchBuildings } from "./data/fetchWikidata";
 import { normalizeBuildings } from "./data/normalizeBuildings";
@@ -67,17 +68,26 @@ function App() {
         );
     }, [filteredBuildings, selectedBuilding]);
 
-    const hasPrev = selectedIndex > 0;
-    const hasNext = selectedIndex < filteredBuildings.length - 1;
-
     const selectPrev = () => {
-        if (!hasPrev) return;
-        setSelectedBuildingId(filteredBuildings[selectedIndex - 1].id);
+        if (filteredBuildings.length === 0) return;
+
+        const prevIndex =
+            selectedIndex <= 0
+                ? filteredBuildings.length - 1
+                : selectedIndex - 1;
+
+        setSelectedBuildingId(filteredBuildings[prevIndex].id);
     };
 
     const selectNext = () => {
-        if (!hasNext) return;
-        setSelectedBuildingId(filteredBuildings[selectedIndex + 1].id);
+        if (filteredBuildings.length === 0) return;
+
+        const nextIndex =
+            selectedIndex >= filteredBuildings.length - 1
+                ? 0
+                : selectedIndex + 1;
+
+        setSelectedBuildingId(filteredBuildings[nextIndex].id);
     };
 
     const buildingsForStyleOptions = useMemo(() => {
@@ -139,7 +149,11 @@ function App() {
             {loading ? (
                 <>
                     <div className="skeleton map-skeleton"/>
-                    <div className="skeleton card-skeleton"/>
+                    <div className="building-card-wrapper">
+                        <button className="nav-arrow" disabled>◀</button>
+                        <div className="skeleton card-skeleton"/>
+                        <button className="nav-arrow" disabled>▶</button>
+                    </div>
                 </>
             ) : (
                 <>
@@ -153,8 +167,8 @@ function App() {
                             building={selectedBuilding}
                             onPrev={selectPrev}
                             onNext={selectNext}
-                            hasPrev={hasPrev}
-                            hasNext={hasNext}
+                            selectedIndex={selectedIndex}
+                            buildingsCount={filteredBuildings.length}
                         />
                     )}
                 </>

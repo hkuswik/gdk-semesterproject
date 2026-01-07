@@ -46,7 +46,7 @@ function getYearLabel(building) {
     return "unknown";
 }
 
-export default function BuildingDetailsCard({ building, onPrev, onNext, hasPrev, hasNext }) {
+export default function BuildingDetailsCard({ building, onPrev, onNext, selectedIndex, buildingsCount }) {
     if (!building) return null;
 
     return (
@@ -54,8 +54,6 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, hasPrev,
             <button
                 className="nav-arrow left"
                 onClick={onPrev}
-                disabled={!hasPrev}
-                aria-label="Previous building"
             >
                 ◀
             </button>
@@ -81,16 +79,19 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, hasPrev,
                 {building.type.length > 0 && (
                     <p><b>Type:</b> {building.type}</p>
                 )}
-                {building.heritage && (
-                    <p><b>Heritage:</b> {building.heritage}</p>
-                )}
+                <div className="last-row">
+                    {building.heritage ? (
+                        <p><b>Heritage:</b> {building.heritage}</p>
+                    ): <div></div>}
+                    <p className="counter">
+                        {selectedIndex + 1} / {buildingsCount}
+                    </p>
+                </div>
             </div>
 
             <button
                 className="nav-arrow right"
                 onClick={onNext}
-                disabled={!hasNext}
-                aria-label="Next building"
             >
                 ▶
             </button>

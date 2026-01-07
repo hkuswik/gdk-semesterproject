@@ -3,7 +3,7 @@ import { normalizeStyle } from "./styleNormalizer.js";
 export function normalizeBuildings(sparqlJson) {
     return sparqlJson.results.bindings.map(b => ({
         id: b.building.value,
-        label: b.buildingLabel?.value ?? "Unknown",
+        label: b.buildingLabel?.value ?? "Nameless Building",
         description: b.buildingDescription?.value ?? "",
         type: b.type?.value ?? "",
         heritage: b.heritageLabel?.value ?? null,

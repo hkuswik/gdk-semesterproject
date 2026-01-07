@@ -18,6 +18,11 @@
     justify-content: space-between;
 }
 
+.building-card .last-row {
+    display: flex;
+    justify-content: space-between;
+}
+
 .building-card h2 {
     font-size: 14px;
 }
