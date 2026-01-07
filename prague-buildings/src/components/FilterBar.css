@@ -21,10 +21,10 @@
 }
 
 .pill {
-    border: 1px solid pink;
+    border: 1px solid darkslateblue;
     border-radius: 999px;
-    padding: 4px 10px;
-    background: #f5f5f5;
+    padding: 4px 8px;
+    background: pink;
     cursor: pointer;
     font-size: 0.65rem;
     display: flex;

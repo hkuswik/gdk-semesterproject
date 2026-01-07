@@ -1,9 +1,23 @@
 .building-card {
-    border: 1px solid #ddd;
+    background-color: #FFF;
     border-radius: 8px;
     padding: 10px;
-    width: 35%;
-    max-width: 360px;
+    height: 100%;
+    width: 30%;
+    min-width: 300px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.building-card h2 {
+    font-size: 14px;
+}
+
+.building-card p {
+    margin: 2px;
+    font-size: 13px;
 }
 
 .building-card img {
@@ -13,5 +27,4 @@
     border-radius: 6px;
     display: block;
     margin-bottom: 10px;
-    background-color: #eee;
 }

@@ -84,31 +84,35 @@ function App() {
     return (<div className="app">
         <div className="header">
             <h1>Prague Architectural Explorer</h1>
-            <div className="filter-row">
+            {loading? (
+                <div className="spinner-container">
+                    <div className="architect-loader"/>
+                    <p>Loading buildings from Wikidata...</p>
+                </div>
+            ) : (
                 <FilterBar
                     filters={filters}
                     setFilters={setFilters}
                     availableStyles={availableStyles}
                     availableArchitects={availableArchitects}
                 />
-                {loading && (
-                    <div className="spinner-container">
-                        <div className="spinner"/>
-                        <p>Loading buildings from Wikidata…</p>
-                    </div>
-                )}
-            </div>
+            )}
         </div>
         <div className="main-content">
-            <MapView
-                buildings={filteredBuildings}
-                selectedBuildingId={selectedBuildingId}
-                onSelectBuilding={setSelectedBuildingId}
-            />
-            {selectedBuilding ? (
-                <BuildingDetailsCard building={selectedBuilding}/>
+            {loading ? (
+                <>
+                    <div className="skeleton map-skeleton"/>
+                    <div className="skeleton card-skeleton"/>
+                </>
             ) : (
-                <p>No building selected</p>
+                <>
+                    <MapView
+                        buildings={filteredBuildings}
+                        selectedBuildingId={selectedBuildingId}
+                        onSelectBuilding={setSelectedBuildingId}
+                    />
+                    {selectedBuildingId && (<BuildingDetailsCard building={selectedBuilding}/>)}
+                </>
             )}
         </div>
     </div>);

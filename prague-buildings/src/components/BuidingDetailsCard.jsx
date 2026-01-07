@@ -49,14 +49,15 @@ function getYearLabel(building) {
 export default function BuildingCard({ building }) {
     return (
         <div className="building-card">
-            {building.image && (
-                <img
-                    src={building.image}
-                    alt={building.label}
-                />
-            )}
-
-            <h4>{building.label}</h4>
+            <div>
+                {building.image && (
+                    <img
+                        src={building.image}
+                        alt={building.label}
+                    />
+                )}
+                <h2>{(building.label)}</h2>
+            </div>
 
             {<p><b>Year:</b> {getYearLabel(building)}</p>}
             {building.styles.length > 0 && (
@@ -64,6 +65,9 @@ export default function BuildingCard({ building }) {
             )}
             {building.architects.length > 0 && (
                 <p><b>Architect:</b> {building.architects.join(", ")}</p>
+            )}
+            {building.type.length > 0 && (
+                <p><b>Type:</b> {building.type}</p>
             )}
             {building.heritage && (
                 <p><b>Heritage:</b> {building.heritage}</p>
