@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { fetchBuildings } from "./data/fetchWikidata";
 import { normalizeBuildings } from "./data/normalizeBuildings";
 import FilterBar from "./components/FilterBar";
@@ -14,7 +14,6 @@ function App() {
     const [filters, setFilters] = useState({
         styles: [],
         architects: [],
-        yearRange: [0, 2026],
     });
 
     useEffect(() => {
@@ -25,24 +24,9 @@ function App() {
             setBuildings(normalized);
             setLoading(false);
         }
+
         load();
     }, []);
-
-    // set build years to oldest/youngest build year of actual data
-    useEffect(() => {
-        if (buildings.length === 0) return;
-
-        const years = buildings
-            .map(b => b.year)
-            .filter(Boolean);
-
-        if (years.length === 0) return;
-
-        setFilters(f => ({
-            ...f,
-            yearRange: [Math.min(...years), Math.max(...years)],
-        }));
-    }, [buildings]);
 
     const filteredBuildings = useMemo(() => {
         return buildings.filter(b => {
@@ -54,12 +38,7 @@ function App() {
                 filters.architects.length === 0 ||
                 filters.architects.some(a => b.architects.includes(a));
 
-            const matchesYear =
-                !b.year ||
-                (b.year >= filters.yearRange[0] &&
-                    b.year <= filters.yearRange[1]);
-
-            return matchesStyle && matchesArchitect && matchesYear;
+            return matchesStyle && matchesArchitect;
         });
     }, [buildings, filters]);
 
@@ -69,56 +48,10 @@ function App() {
 
     const buildingsForStyleOptions = useMemo(() => {
         return buildings.filter(b => {
-            const matchesArchitect =
-                filters.architects.length === 0 ||
+            return filters.architects.length === 0 ||
                 filters.architects.some(a => b.architects.includes(a));
-
-            const matchesYear =
-                !b.year ||
-                (b.year >= filters.yearRange[0] &&
-                    b.year <= filters.yearRange[1]);
-
-            return matchesArchitect && matchesYear;
         });
-    }, [buildings, filters.architects, filters.yearRange]);
-
-    const buildingsForYearRange = useMemo(() => {
-        return buildings.filter(b => {
-            const matchesStyle =
-                filters.styles.length === 0 ||
-                filters.styles.some(s => b.styles.includes(s));
-
-            const matchesArchitect =
-                filters.architects.length === 0 ||
-                filters.architects.some(a => b.architects.includes(a));
-
-            return matchesStyle && matchesArchitect;
-        });
-    }, [buildings, filters.styles, filters.architects]);
-
-    useEffect(() => {
-        const years = buildingsForYearRange
-            .map(b => b.year)
-            .filter(Boolean);
-
-        if (years.length === 0) return;
-
-        const min = Math.min(...years);
-        const max = Math.max(...years);
-
-        setFilters(f => {
-            const [currentMin, currentMax] = f.yearRange;
-
-            // Clamp nur wenn nötig (wichtig!)
-            return {
-                ...f,
-                yearRange: [
-                    Math.max(currentMin, min),
-                    Math.min(currentMax, max),
-                ],
-            };
-        });
-    }, [buildingsForYearRange]);
+    }, [buildings, filters.architects]);
 
     const availableStyles = useMemo(() => {
         const set = new Set();
@@ -160,7 +93,7 @@ function App() {
                 />
                 {loading && (
                     <div className="spinner-container">
-                        <div className="spinner" />
+                        <div className="spinner"/>
                         <p>Loading buildings from Wikidata…</p>
                     </div>
                 )}
@@ -173,7 +106,7 @@ function App() {
                 onSelectBuilding={setSelectedBuildingId}
             />
             {selectedBuilding ? (
-                <BuildingDetailsCard building={selectedBuilding} />
+                <BuildingDetailsCard building={selectedBuilding}/>
             ) : (
                 <p>No building selected</p>
             )}
