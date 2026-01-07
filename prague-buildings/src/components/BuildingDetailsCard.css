@@ -1,9 +1,16 @@
+.building-card-wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: stretch;
+    width: 38%;
+}
+
 .building-card {
     background-color: #FFF;
     border-radius: 8px;
     padding: 10px;
     height: 100%;
-    width: 30%;
+    width: 80%;
     min-width: 300px;
     min-height: 400px;
     display: flex;
@@ -27,4 +34,23 @@
     border-radius: 6px;
     display: block;
     margin-bottom: 10px;
+}
+
+.nav-arrow {
+    width: 32px;
+    border: none;
+    background: transparent;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #333;
+    opacity: 0.7;
+}
+
+.nav-arrow:hover:not(:disabled) {
+    opacity: 1;
+}
+
+.nav-arrow:disabled {
+    opacity: 0.2;
+    cursor: default;
 }

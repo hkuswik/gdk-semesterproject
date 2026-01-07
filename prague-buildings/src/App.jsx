@@ -59,6 +59,27 @@ function App() {
         return found || filteredBuildings[0];
     }, [filteredBuildings, selectedBuildingId]);
 
+    // iterate over buildings
+    const selectedIndex = useMemo(() => {
+        if (!selectedBuilding) return -1;
+        return filteredBuildings.findIndex(
+            b => b.id === selectedBuilding.id
+        );
+    }, [filteredBuildings, selectedBuilding]);
+
+    const hasPrev = selectedIndex > 0;
+    const hasNext = selectedIndex < filteredBuildings.length - 1;
+
+    const selectPrev = () => {
+        if (!hasPrev) return;
+        setSelectedBuildingId(filteredBuildings[selectedIndex - 1].id);
+    };
+
+    const selectNext = () => {
+        if (!hasNext) return;
+        setSelectedBuildingId(filteredBuildings[selectedIndex + 1].id);
+    };
+
     const buildingsForStyleOptions = useMemo(() => {
         return buildings.filter(b => {
             return filters.architects.length === 0 ||
@@ -100,7 +121,7 @@ function App() {
     return (<div className="app">
         <div className="header">
             <h1>Prague Architectural Explorer</h1>
-            {loading? (
+            {loading ? (
                 <div className="spinner-container">
                     <div className="architect-loader"/>
                     <p>Loading buildings from Wikidata...</p>
@@ -127,7 +148,15 @@ function App() {
                         selectedBuildingId={selectedBuilding?.id || null}
                         onSelectBuilding={setSelectedBuildingId}
                     />
-                    {selectedBuilding && (<BuildingDetailsCard building={selectedBuilding}/>)}
+                    {selectedBuilding && (
+                        <BuildingDetailsCard
+                            building={selectedBuilding}
+                            onPrev={selectPrev}
+                            onNext={selectNext}
+                            hasPrev={hasPrev}
+                            hasNext={hasNext}
+                        />
+                    )}
                 </>
             )}
         </div>

@@ -46,34 +46,54 @@ function getYearLabel(building) {
     return "unknown";
 }
 
-export default function BuildingDetailsCard({ building }) {
+export default function BuildingDetailsCard({ building, onPrev, onNext, hasPrev, hasNext }) {
     if (!building) return null;
 
     return (
-        <div className="building-card">
-            <div>
-                {building.image && (
-                    <img
-                        src={building.image}
-                        alt={building.label}
-                    />
+        <div className="building-card-wrapper">
+            <button
+                className="nav-arrow left"
+                onClick={onPrev}
+                disabled={!hasPrev}
+                aria-label="Previous building"
+            >
+                ◀
+            </button>
+
+            <div className="building-card">
+                <div>
+                    {building.image && (
+                        <img
+                            src={building.image}
+                            alt={building.label}
+                        />
+                    )}
+                    <h2>{(building.label)}</h2>
+                </div>
+
+                {<p><b>Year:</b> {getYearLabel(building)}</p>}
+                {building.styles.length > 0 && (
+                    <p><b>Style:</b> {building.styles.join(", ")}</p>
                 )}
-                <h2>{(building.label)}</h2>
+                {building.architects.length > 0 && (
+                    <p><b>Architect:</b> {building.architects.join(", ")}</p>
+                )}
+                {building.type.length > 0 && (
+                    <p><b>Type:</b> {building.type}</p>
+                )}
+                {building.heritage && (
+                    <p><b>Heritage:</b> {building.heritage}</p>
+                )}
             </div>
 
-            {<p><b>Year:</b> {getYearLabel(building)}</p>}
-            {building.styles.length > 0 && (
-                <p><b>Style:</b> {building.styles.join(", ")}</p>
-            )}
-            {building.architects.length > 0 && (
-                <p><b>Architect:</b> {building.architects.join(", ")}</p>
-            )}
-            {building.type.length > 0 && (
-                <p><b>Type:</b> {building.type}</p>
-            )}
-            {building.heritage && (
-                <p><b>Heritage:</b> {building.heritage}</p>
-            )}
+            <button
+                className="nav-arrow right"
+                onClick={onNext}
+                disabled={!hasNext}
+                aria-label="Next building"
+            >
+                ▶
+            </button>
         </div>
     );
 }
