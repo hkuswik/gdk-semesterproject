@@ -1,4 +1,5 @@
 import "./FilterBar.css";
+import FilterPill from "./FilterPill.jsx";
 
 /**
  * styles
@@ -15,12 +16,18 @@ export default function FilterBar({ filters, setFilters, availableStyles }) {
                 <label>Styles</label>
                 <div className="pill-container">
                     {availableStyles.map(style => {
+                        const label =
+                            style === "__NO_STYLE__"
+                                ? "No style assigned"
+                                : style;
+
                         const isSelected = filters.styles.includes(style);
 
                         return (
-                            <button
+                            <FilterPill
                                 key={style}
-                                className={`pill ${isSelected ? "selected" : ""}`}
+                                label={label}
+                                selected={isSelected}
                                 onClick={() =>
                                     setFilters(f => ({
                                         ...f,
@@ -29,10 +36,7 @@ export default function FilterBar({ filters, setFilters, availableStyles }) {
                                             : [...f.styles, style],
                                     }))
                                 }
-                            >
-                                {style}
-                                {isSelected && <span className="pill-x">×</span>}
-                            </button>
+                            />
                         );
                     })}
                 </div>

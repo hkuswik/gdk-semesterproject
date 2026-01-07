@@ -4,7 +4,7 @@ import { fetchBuildings } from "./data/fetchWikidata";
 import { normalizeBuildings } from "./data/normalizeBuildings";
 import FilterBar from "./components/FilterBar";
 import MapView from "./components/MapView";
-import BuildingDetailsCard from "./components/BuidingDetailsCard.jsx";
+import BuildingDetailsCard from "./components/BuildingDetailsCard.jsx";
 
 function App() {
     const [loading, setLoading] = useState(true);
@@ -32,7 +32,12 @@ function App() {
         return buildings.filter(b => {
             const matchesStyle =
                 filters.styles.length === 0 ||
-                filters.styles.some(s => b.styles.includes(s));
+                filters.styles.some(s => {
+                    if (s === "__NO_STYLE__") {
+                        return b.styles.length === 0;
+                    }
+                    return b.styles.includes(s);
+                });
 
             const matchesArchitect =
                 filters.architects.length === 0 ||
@@ -55,12 +60,23 @@ function App() {
 
     const availableStyles = useMemo(() => {
         const set = new Set();
+        let hasNoStyle = false;
 
-        buildingsForStyleOptions.forEach(b =>
-            b.styles.forEach(s => set.add(s))
-        );
+        buildingsForStyleOptions.forEach(b => {
+            if (b.styles.length === 0) {
+                hasNoStyle = true;
+            } else {
+                b.styles.forEach(s => set.add(s));
+            }
+        });
 
-        return Array.from(set).sort();
+        const result = Array.from(set).sort();
+
+        if (hasNoStyle) {
+            result.push("__NO_STYLE__");
+        }
+
+        return result;
     }, [buildingsForStyleOptions]);
 
     const availableArchitects = useMemo(() => {
@@ -111,7 +127,7 @@ function App() {
                         selectedBuildingId={selectedBuildingId}
                         onSelectBuilding={setSelectedBuildingId}
                     />
-                    {selectedBuildingId && (<BuildingDetailsCard building={selectedBuilding}/>)}
+                    {selectedBuilding && (<BuildingDetailsCard building={selectedBuilding}/>)}
                 </>
             )}
         </div>

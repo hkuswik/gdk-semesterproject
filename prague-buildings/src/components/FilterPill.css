@@ -1,0 +1,31 @@
+.pill {
+    border: 1px solid darkslateblue;
+    border-radius: 999px;
+    padding: 4px 8px;
+    margin: 0 2px;
+    background: pink;
+    cursor: pointer;
+    font-size: 0.65rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pill:hover {
+    background: #eaeaea;
+}
+
+.pill.selected {
+    background: #333;
+    color: white;
+    border-color: #333;
+}
+
+.pill-x {
+    font-weight: bold;
+    line-height: 1;
+}
+
+.pill-label {
+    white-space: nowrap;
+}

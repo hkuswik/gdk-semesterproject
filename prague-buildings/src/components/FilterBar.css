@@ -12,37 +12,3 @@
 .filter-group select {
     width: 100%;
 }
-
-.pill-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 4px;
-}
-
-.pill {
-    border: 1px solid darkslateblue;
-    border-radius: 999px;
-    padding: 4px 8px;
-    background: pink;
-    cursor: pointer;
-    font-size: 0.65rem;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.pill:hover {
-    background: #eaeaea;
-}
-
-.pill.selected {
-    background: #333;
-    color: white;
-    border-color: #333;
-}
-
-.pill-x {
-    font-weight: bold;
-    cursor: pointer;
-}

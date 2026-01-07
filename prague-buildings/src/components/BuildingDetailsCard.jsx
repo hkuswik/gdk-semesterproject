@@ -46,7 +46,9 @@ function getYearLabel(building) {
     return "unknown";
 }
 
-export default function BuildingCard({ building }) {
+export default function BuildingDetailsCard({ building }) {
+    if (!building) return null;
+
     return (
         <div className="building-card">
             <div>
