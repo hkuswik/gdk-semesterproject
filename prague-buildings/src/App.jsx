@@ -28,6 +28,7 @@ function App() {
         load();
     }, []);
 
+    // filter buildings
     const filteredBuildings = useMemo(() => {
         return buildings.filter(b => {
             const matchesStyle =
@@ -47,9 +48,16 @@ function App() {
         });
     }, [buildings, filters]);
 
-    const selectedBuilding = filteredBuildings.find(
-        b => b.id === selectedBuildingId
-    );
+    // calculate building to be displayed immediately
+    const selectedBuilding = useMemo(() => {
+        if (filteredBuildings.length === 0) return null;
+
+        // search building the user clicked on
+        const found = filteredBuildings.find(b => b.id === selectedBuildingId);
+
+        // FALLBACK: if ID isn't in list anymore, take first building in filtered list
+        return found || filteredBuildings[0];
+    }, [filteredBuildings, selectedBuildingId]);
 
     const buildingsForStyleOptions = useMemo(() => {
         return buildings.filter(b => {
@@ -89,14 +97,6 @@ function App() {
         return Array.from(set).sort();
     }, [filteredBuildings]);
 
-    useEffect(() => {
-        if (filteredBuildings.length > 0) {
-            setSelectedBuildingId(filteredBuildings[0].id);
-        } else {
-            setSelectedBuildingId(null);
-        }
-    }, [filteredBuildings]);
-
     return (<div className="app">
         <div className="header">
             <h1>Prague Architectural Explorer</h1>
@@ -124,7 +124,7 @@ function App() {
                 <>
                     <MapView
                         buildings={filteredBuildings}
-                        selectedBuildingId={selectedBuildingId}
+                        selectedBuildingId={selectedBuilding?.id || null}
                         onSelectBuilding={setSelectedBuildingId}
                     />
                     {selectedBuilding && (<BuildingDetailsCard building={selectedBuilding}/>)}
