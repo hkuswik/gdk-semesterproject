@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { fetchBuildings } from "./data/fetchWikidata";
 import { normalizeBuildings } from "./data/normalizeBuildings";
 import FilterBar from "./components/FilterBar";
@@ -9,18 +9,12 @@ import BuildingDetailsCard from "./components/BuidingDetailsCard.jsx";
 function App() {
     const [loading, setLoading] = useState(true);
     const [buildings, setBuildings] = useState([]);
-    const [filtered, setFiltered] = useState([]);
     const [selectedBuildingId, setSelectedBuildingId] = useState(null);
 
-    const selectedBuilding = filtered.find(
-        b => b.id === selectedBuildingId
-    );
-
     const [filters, setFilters] = useState({
-        yearFrom: "",
-        yearTo: "",
-        style: "all",
-        architect: "all",
+        styles: [],
+        architects: [],
+        yearRange: [0, 2026],
     });
 
     useEffect(() => {
@@ -29,7 +23,6 @@ function App() {
             const data = await fetchBuildings();
             const normalized = normalizeBuildings(data);
             setBuildings(normalized);
-            setFiltered(normalized);
             setLoading(false);
         }
         load();
@@ -47,54 +40,123 @@ function App() {
 
         setFilters(f => ({
             ...f,
-            yearFrom: Math.min(...years).toString(),
-            yearTo: Math.max(...years).toString(),
+            yearRange: [Math.min(...years), Math.max(...years)],
         }));
     }, [buildings]);
 
-    useEffect(() => {
-        let result = buildings;
+    const filteredBuildings = useMemo(() => {
+        return buildings.filter(b => {
+            const matchesStyle =
+                filters.styles.length === 0 ||
+                filters.styles.some(s => b.styles.includes(s));
 
-        const yearFrom = filters.yearFrom !== "" ? Number(filters.yearFrom) : null;
-        const yearTo = filters.yearTo !== "" ? Number(filters.yearTo) : null;
+            const matchesArchitect =
+                filters.architects.length === 0 ||
+                filters.architects.some(a => b.architects.includes(a));
 
-        result = result.filter(b => {
-            if (!b.year) return true;
-            if (yearFrom !== null && b.year < yearFrom) return false;
-            return !(yearTo !== null && b.year > yearTo);
+            const matchesYear =
+                !b.year ||
+                (b.year >= filters.yearRange[0] &&
+                    b.year <= filters.yearRange[1]);
+
+            return matchesStyle && matchesArchitect && matchesYear;
         });
+    }, [buildings, filters]);
 
-        if (filters.style !== "all") {
-            result = result.filter(b =>
-                b.styles.includes(filters.style)
-            );
-        }
+    const selectedBuilding = filteredBuildings.find(
+        b => b.id === selectedBuildingId
+    );
 
-        if (filters.architect !== "all") {
-            result = result.filter(b =>
-                b.architects.includes(filters.architect)
-            );
-        }
+    const buildingsForStyleOptions = useMemo(() => {
+        return buildings.filter(b => {
+            const matchesArchitect =
+                filters.architects.length === 0 ||
+                filters.architects.some(a => b.architects.includes(a));
 
-        setFiltered(result);
-    }, [filters, buildings]);
+            const matchesYear =
+                !b.year ||
+                (b.year >= filters.yearRange[0] &&
+                    b.year <= filters.yearRange[1]);
+
+            return matchesArchitect && matchesYear;
+        });
+    }, [buildings, filters.architects, filters.yearRange]);
+
+    const buildingsForYearRange = useMemo(() => {
+        return buildings.filter(b => {
+            const matchesStyle =
+                filters.styles.length === 0 ||
+                filters.styles.some(s => b.styles.includes(s));
+
+            const matchesArchitect =
+                filters.architects.length === 0 ||
+                filters.architects.some(a => b.architects.includes(a));
+
+            return matchesStyle && matchesArchitect;
+        });
+    }, [buildings, filters.styles, filters.architects]);
 
     useEffect(() => {
-        if (filtered.length > 0) {
-            setSelectedBuildingId(filtered[0].id);
+        const years = buildingsForYearRange
+            .map(b => b.year)
+            .filter(Boolean);
+
+        if (years.length === 0) return;
+
+        const min = Math.min(...years);
+        const max = Math.max(...years);
+
+        setFilters(f => {
+            const [currentMin, currentMax] = f.yearRange;
+
+            // Clamp nur wenn nötig (wichtig!)
+            return {
+                ...f,
+                yearRange: [
+                    Math.max(currentMin, min),
+                    Math.min(currentMax, max),
+                ],
+            };
+        });
+    }, [buildingsForYearRange]);
+
+    const availableStyles = useMemo(() => {
+        const set = new Set();
+
+        buildingsForStyleOptions.forEach(b =>
+            b.styles.forEach(s => set.add(s))
+        );
+
+        return Array.from(set).sort();
+    }, [buildingsForStyleOptions]);
+
+    const availableArchitects = useMemo(() => {
+        const set = new Set();
+
+        filteredBuildings.forEach(b =>
+            b.architects.forEach(a => set.add(a))
+        );
+
+        return Array.from(set).sort();
+    }, [filteredBuildings]);
+
+    useEffect(() => {
+        if (filteredBuildings.length > 0) {
+            setSelectedBuildingId(filteredBuildings[0].id);
         } else {
             setSelectedBuildingId(null);
         }
-    }, [filtered]);
+    }, [filteredBuildings]);
 
     return (<div className="app">
         <div className="header">
             <h1>Prague Architectural Explorer</h1>
             <div className="filter-row">
                 <FilterBar
-                    buildings={buildings}
                     filters={filters}
                     setFilters={setFilters}
+                    availableStyles={availableStyles}
+                    availableArchitects={availableArchitects}
                 />
                 {loading && (
                     <div className="spinner-container">
@@ -106,7 +168,7 @@ function App() {
         </div>
         <div className="main-content">
             <MapView
-                buildings={filtered}
+                buildings={filteredBuildings}
                 selectedBuildingId={selectedBuildingId}
                 onSelectBuilding={setSelectedBuildingId}
             />

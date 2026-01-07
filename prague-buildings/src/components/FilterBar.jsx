@@ -4,16 +4,11 @@ import "./FilterBar.css";
  * year from/to
  * styles
  * architects
+ * building types
+ * heritage?
  * --> generate options dynamically from data
  */
-export default function FilterBar({ buildings, filters, setFilters }) {
-    const styles = Array.from(
-        new Set(buildings.flatMap(b => b.styles))
-    ).sort();
-
-    const architects = Array.from(
-        new Set(buildings.flatMap(b => b.architects))
-    ).sort();
+export default function FilterBar({ filters, setFilters, availableStyles, availableArchitects }) {
 
     return (
         <div className="filter-bar">
@@ -22,11 +17,14 @@ export default function FilterBar({ buildings, filters, setFilters }) {
                 <input
                     type="number"
                     placeholder="e.g., 1800"
-                    value={filters.yearFrom}
-                    onChange={e => setFilters(f => ({
-                        ...f,
-                        yearFrom: e.target.value
-                    }))}
+                    value={filters.yearRange[0]}
+                    onChange={e => {
+                        const value = Number(e.target.value);
+                        setFilters(f => ({
+                            ...f,
+                            yearRange: [value, f.yearRange[1]],
+                        }));
+                    }}
                 />
             </div>
 
@@ -35,44 +33,42 @@ export default function FilterBar({ buildings, filters, setFilters }) {
                 <input
                     type="number"
                     placeholder="e.g., 2026"
-                    value={filters.yearTo}
-                    onChange={e => setFilters(f => ({
-                        ...f,
-                        yearTo: e.target.value
-                    }))}
+                    value={filters.yearRange[1]}
+                    onChange={e => {
+                        const value = Number(e.target.value);
+                        setFilters(f => ({
+                            ...f,
+                            yearRange: [f.yearRange[0], value],
+                        }));
+                    }}
                 />
             </div>
 
             <div className="filter-group">
-                <label>Style</label><br />
-                <select
-                    value={filters.style}
-                    onChange={e => setFilters(f => ({
-                        ...f,
-                        style: e.target.value
-                    }))}
-                >
-                    <option value="all">All</option>
-                    {styles.map(s => (
-                        <option key={s} value={s}>{s}</option>
-                    ))}
-                </select>
-            </div>
+                <label>Styles</label>
+                <div className="pill-container">
+                    {availableStyles.map(style => {
+                        const isSelected = filters.styles.includes(style);
 
-            <div className="filter-group">
-                <label>Architect</label><br />
-                <select
-                    value={filters.architect}
-                    onChange={e => setFilters(f => ({
-                        ...f,
-                        architect: e.target.value
-                    }))}
-                >
-                    <option value="all">All</option>
-                    {architects.map(a => (
-                        <option key={a} value={a}>{a}</option>
-                    ))}
-                </select>
+                        return (
+                            <button
+                                key={style}
+                                className={`pill ${isSelected ? "selected" : ""}`}
+                                onClick={() =>
+                                    setFilters(f => ({
+                                        ...f,
+                                        styles: isSelected
+                                            ? f.styles.filter(s => s !== style)
+                                            : [...f.styles, style],
+                                    }))
+                                }
+                            >
+                                {style}
+                                {isSelected && <span className="pill-x">×</span>}
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
         </div>
     );
