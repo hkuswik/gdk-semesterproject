@@ -5,11 +5,27 @@
 }
 
 .filter-group {
-    width: 50%;
+    background: white;
+    border-radius: 8px;
+    padding: 8px;
+    height: 100%;
+}
+
+.filter-group.styles {
+    width: 40%;
+}
+
+.filter-group.architects {
+    width: 30%;
+}
+
+.filter-group.building-types {
+    width: 30%;
 }
 
 .filter-group label {
     font-weight: 500;
+    margin-bottom: 8px;
 }
 
 .filter-group select {

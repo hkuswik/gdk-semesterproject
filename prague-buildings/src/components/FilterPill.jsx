@@ -1,10 +1,10 @@
 import "./FilterPill.css";
 
-export default function FilterPill({ label, selected, onClick }) {
+export default function FilterPill({ label, selected, onClick, variant = "default" }) {
     return (
         <button
             type="button"
-            className={`pill ${selected ? "selected" : ""}`}
+            className={`pill pill-${variant} ${selected ? "selected" : ""}`}
             onClick={onClick}
         >
             <span className="pill-label">{label}</span>

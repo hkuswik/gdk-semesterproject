@@ -13,7 +13,7 @@ export default function FilterBar({ filters, setFilters, availableStyles, availa
     return (
         <div className="filter-bar">
             {/* ---------- STYLES ---------- */}
-            <div className="filter-group">
+            <div className="filter-group styles">
                 <label>Styles</label>
 
                 <div className="pill-container">
@@ -29,6 +29,7 @@ export default function FilterBar({ filters, setFilters, availableStyles, availa
                             <FilterPill
                                 key={style}
                                 label={label}
+                                variant="style"
                                 selected={isSelected}
                                 onClick={() =>
                                     setFilters(f => ({
@@ -45,7 +46,7 @@ export default function FilterBar({ filters, setFilters, availableStyles, availa
             </div>
 
             {/* ---------- ARCHITECTS ---------- */}
-            <div className="filter-group">
+            <div className="filter-group architects">
                 <label>Architects</label>
 
                 {/* Dropdown */}
@@ -80,6 +81,7 @@ export default function FilterBar({ filters, setFilters, availableStyles, availa
                             <FilterPill
                                 key={a}
                                 label={a}
+                                variant="architect"
                                 selected
                                 onClick={() =>
                                     setFilters(f => ({

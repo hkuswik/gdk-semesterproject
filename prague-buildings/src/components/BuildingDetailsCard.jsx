@@ -99,6 +99,7 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
                                 <FilterPill
                                     key={style}
                                     label={style}
+                                    variant="style"
                                     selected={filters.styles.includes(style)}
                                     onClick={() =>
                                         toggleStyle(style, filters, setFilters)
@@ -117,6 +118,7 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
                                 <FilterPill
                                     key={architect}
                                     label={architect}
+                                    variant="architect"
                                     selected={filters.architects.includes(architect)}
                                     onClick={() =>
                                         toggleArchitect(architect, filters, setFilters)

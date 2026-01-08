@@ -1,9 +1,9 @@
 .pill {
-    border: 1px solid darkslateblue;
-    border-radius: 999px;
+    border-radius: 80px;
+    border: 0;
+    background: #eee;
     padding: 4px 8px;
     margin: 2px;
-    background: pink;
     cursor: pointer;
     font-size: 0.65rem;
     display: inline-flex;
@@ -12,13 +12,35 @@
 }
 
 .pill:hover {
-    background: #eaeaea;
+    background: #aeaeae;
 }
 
-.pill.selected {
-    background: #333;
+.pill-style {
+    background: #f1ecff;
+    color: #3b2f7a;
+}
+
+.pill-style:hover {
+    background: #e2dcff;
+}
+
+.pill-style.selected {
+    background: #6b5cff;
     color: white;
-    border-color: #333;
+}
+
+.pill-architect {
+    background: #e9f7f1;
+    color: #1f5c48;
+}
+
+.pill-architect:hover {
+    background: #dff2ea;
+}
+
+.pill-architect.selected {
+    background: #2f9f75;
+    color: white;
 }
 
 .pill-x {
