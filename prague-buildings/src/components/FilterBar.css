@@ -12,7 +12,12 @@
     font-weight: 500;
 }
 
-.filter-group input,
 .filter-group select {
     width: 100%;
+    margin-bottom: 5px;
+}
+
+.pill-container {
+    display: flex;
+    flex-wrap: wrap;
 }

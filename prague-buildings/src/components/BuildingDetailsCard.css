@@ -59,3 +59,8 @@
     opacity: 0.2;
     cursor: default;
 }
+
+.filter-row {
+    display: flex;
+    gap: 4px;
+}

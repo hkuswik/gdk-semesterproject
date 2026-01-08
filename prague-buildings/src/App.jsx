@@ -86,6 +86,8 @@ function App() {
                             onNext={selectNext}
                             selectedIndex={selectedIndex}
                             buildingsCount={filteredBuildings.length}
+                            filters={filters}
+                            setFilters={setFilters}
                         />
                     )}
                 </>

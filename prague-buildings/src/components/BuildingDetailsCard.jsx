@@ -1,4 +1,6 @@
 import "./BuildingDetailsCard.css";
+import "./FilterBar.css";
+import FilterPill from "./FilterPill.jsx";
 
 const STYLE_ERA_MAP = {
     "Art Nouveau": "1895–1914",
@@ -46,7 +48,25 @@ function getYearLabel(building) {
     return "unknown";
 }
 
-export default function BuildingDetailsCard({ building, onPrev, onNext, selectedIndex, buildingsCount }) {
+function toggleStyle(style, filters, setFilters) {
+    setFilters(f => ({
+        ...f,
+        styles: f.styles.includes(style)
+            ? f.styles.filter(s => s !== style)
+            : [...f.styles, style],
+    }));
+}
+
+function toggleArchitect(architect, filters, setFilters) {
+    setFilters(f => ({
+        ...f,
+        architects: f.architects.includes(architect)
+            ? f.architects.filter(a => a !== architect)
+            : [...f.architects, architect],
+    }));
+}
+
+export default function BuildingDetailsCard({ building, onPrev, onNext, selectedIndex, buildingsCount, filters, setFilters }) {
     if (!building) return null;
 
     return (
@@ -70,15 +90,47 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
                 </div>
 
                 {<p><b>Year:</b> {getYearLabel(building)}</p>}
+
                 {building.styles.length > 0 && (
-                    <p><b>Style:</b> {building.styles.join(", ")}</p>
+                    <div className="filter-row">
+                        <p><b>Style:</b></p>
+                        <div className="pill-container">
+                            {building.styles.map(style => (
+                                <FilterPill
+                                    key={style}
+                                    label={style}
+                                    selected={filters.styles.includes(style)}
+                                    onClick={() =>
+                                        toggleStyle(style, filters, setFilters)
+                                    }
+                                />
+                            ))}
+                        </div>
+                    </div>
                 )}
+
                 {building.architects.length > 0 && (
-                    <p><b>Architect:</b> {building.architects.join(", ")}</p>
+                    <div className="filter-row">
+                        <p><b>Architect:</b></p>
+                        <div className="pill-container">
+                            {building.architects.map(architect => (
+                                <FilterPill
+                                    key={architect}
+                                    label={architect}
+                                    selected={filters.architects.includes(architect)}
+                                    onClick={() =>
+                                        toggleArchitect(architect, filters, setFilters)
+                                    }
+                                />
+                            ))}
+                        </div>
+                    </div>
                 )}
+
                 {building.type.length > 0 && (
                     <p><b>Type:</b> {building.type}</p>
                 )}
+
                 <div className="last-row">
                     {building.heritage ? (
                         <p><b>Heritage:</b> {building.heritage}</p>

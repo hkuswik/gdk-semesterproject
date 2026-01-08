@@ -45,7 +45,7 @@ export default function FilterBar({ filters, setFilters, availableStyles, availa
             </div>
 
             {/* ---------- ARCHITECTS ---------- */}
-            <div className="filter-group architects">
+            <div className="filter-group">
                 <label>Architects</label>
 
                 {/* Dropdown */}
