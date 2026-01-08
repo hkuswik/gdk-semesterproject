@@ -1,6 +1,10 @@
 import "./FilterBar.css";
 import FilterPill from "./FilterPill.jsx";
 
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 /**
  * styles
  * architects
@@ -8,7 +12,7 @@ import FilterPill from "./FilterPill.jsx";
  * heritage?
  * --> generate options dynamically from data
  */
-export default function FilterBar({ filters, setFilters, availableStyles, availableArchitects }) {
+export default function FilterBar({ filters, setFilters, availableStyles, availableArchitects, availableBuildingTypes }) {
 
     return (
         <div className="filter-bar">
@@ -95,6 +99,34 @@ export default function FilterBar({ filters, setFilters, availableStyles, availa
                         ))}
                     </div>
                 )}
+            </div>
+
+            {/* ---------- BUILDING TYPE ---------- */}
+            <div className="filter-group building-types">
+                <label>Building Types</label>
+
+                <div className="pill-container">
+                    {availableBuildingTypes.map(buildingType => {
+                        const isSelected = filters.buildingTypes.includes(buildingType);
+
+                        return (
+                            <FilterPill
+                                key={buildingType}
+                                label={capitalize(buildingType)}
+                                variant="building-type"
+                                selected={isSelected}
+                                onClick={() =>
+                                    setFilters(f => ({
+                                        ...f,
+                                        buildingTypes: isSelected
+                                            ? f.buildingTypes.filter(b => b !== buildingType)
+                                            : [...f.buildingTypes, buildingType],
+                                    }))
+                                }
+                            />
+                        );
+                    })}
+                </div>
             </div>
         </div>
     );

@@ -1,5 +1,34 @@
 import { useMemo } from "react";
 
+function matchesFilters(b, filters, ignoreKey) {
+    if (ignoreKey !== "styles") {
+        if (
+            filters.styles.length > 0 &&
+            !filters.styles.some(s =>
+                s === "__NO_STYLE__"
+                    ? b.styles.length === 0
+                    : b.styles.includes(s)
+            )
+        ) return false;
+    }
+
+    if (ignoreKey !== "architects") {
+        if (
+            filters.architects.length > 0 &&
+            !filters.architects.some(a => b.architects.includes(a))
+        ) return false;
+    }
+
+    if (ignoreKey !== "buildingTypes") {
+        if (
+            filters.buildingTypes.length > 0 &&
+            !filters.buildingTypes.includes(b.type)
+        ) return false;
+    }
+
+    return true;
+}
+
 export function useBuildingFilters(
     buildings,
     filters,
@@ -23,7 +52,11 @@ export function useBuildingFilters(
                 filters.architects.length === 0 ||
                 filters.architects.some(a => b.architects.includes(a));
 
-            return matchesStyle && matchesArchitect;
+            const matchesBuildingType =
+                filters.buildingTypes.length === 0 ||
+                filters.buildingTypes.includes(b.type);
+
+            return matchesStyle && matchesArchitect && matchesBuildingType;
         });
     }, [buildings, filters]);
 
@@ -70,11 +103,10 @@ export function useBuildingFilters(
 
     // STYLES
     const buildingsForStyleOptions = useMemo(() => {
-        return buildings.filter(b => {
-            return filters.architects.length === 0 ||
-                filters.architects.some(a => b.architects.includes(a));
-        });
-    }, [buildings, filters.architects]);
+        return buildings.filter(b =>
+            matchesFilters(b, filters, "styles")
+        );
+    }, [buildings, filters]);
 
     const availableStyles = useMemo(() => {
         const set = new Set();
@@ -89,29 +121,50 @@ export function useBuildingFilters(
         });
 
         const result = Array.from(set).sort();
-
-        if (hasNoStyle) {
-            result.push("__NO_STYLE__");
-        }
+        if (hasNoStyle) result.push("__NO_STYLE__");
 
         return result;
     }, [buildingsForStyleOptions]);
 
     // ARCHITECTS
+    const buildingsForArchitectOptions = useMemo(() => {
+        return buildings.filter(b =>
+            matchesFilters(b, filters, "architects")
+        );
+    }, [buildings, filters]);
+
     const availableArchitects = useMemo(() => {
         const set = new Set();
 
-        filteredBuildings.forEach(b =>
+        buildingsForArchitectOptions.forEach(b =>
             b.architects.forEach(a => set.add(a))
         );
 
         return Array.from(set).sort();
-    }, [filteredBuildings]);
+    }, [buildingsForArchitectOptions]);
+
+    // BUILDING TYPE
+    const buildingsForTypeOptions = useMemo(() => {
+        return buildings.filter(b =>
+            matchesFilters(b, filters, "buildingTypes")
+        );
+    }, [buildings, filters]);
+
+    const availableBuildingTypes = useMemo(() => {
+        const set = new Set();
+
+        buildingsForTypeOptions.forEach(b => {
+            if (b.type) set.add(b.type);
+        });
+
+        return Array.from(set).sort();
+    }, [buildingsForTypeOptions]);
 
     return {
         filteredBuildings,
         availableStyles,
         availableArchitects,
+        availableBuildingTypes,
         selectedBuilding,
         selectedIndex,
         selectPrev,

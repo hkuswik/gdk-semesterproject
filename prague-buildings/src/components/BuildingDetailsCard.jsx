@@ -48,6 +48,10 @@ function getYearLabel(building) {
     return "unknown";
 }
 
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 function toggleStyle(style, filters, setFilters) {
     setFilters(f => ({
         ...f,
@@ -63,6 +67,15 @@ function toggleArchitect(architect, filters, setFilters) {
         architects: f.architects.includes(architect)
             ? f.architects.filter(a => a !== architect)
             : [...f.architects, architect],
+    }));
+}
+
+function toggleBuildingType(type, filters, setFilters) {
+    setFilters(f => ({
+        ...f,
+        buildingTypes: f.buildingTypes.includes(type)
+            ? f.buildingTypes.filter(b => b !== type)
+            : [type],
     }));
 }
 
@@ -129,8 +142,18 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
                     </div>
                 )}
 
-                {building.type.length > 0 && (
-                    <p><b>Type:</b> {building.type}</p>
+                {building.type && (
+                    <div className="filter-row">
+                        <p><b>Type:</b></p>
+                        <FilterPill
+                            label={capitalize(building.type)}
+                            variant="building-type"
+                            selected={filters.buildingTypes.includes(building.type)}
+                            onClick={() =>
+                                toggleBuildingType(building.type, filters, setFilters)
+                            }
+                        />
+                    </div>
                 )}
 
                 <div className="last-row">

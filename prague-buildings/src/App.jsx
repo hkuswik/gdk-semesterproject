@@ -16,6 +16,7 @@ function App() {
     const [filters, setFilters] = useState({
         styles: [],
         architects: [],
+        buildingTypes: [],
     });
 
     useEffect(() => {
@@ -33,6 +34,7 @@ function App() {
         filteredBuildings,
         availableStyles,
         availableArchitects,
+        availableBuildingTypes,
         selectedBuilding,
         selectedIndex,
         selectPrev,
@@ -59,6 +61,7 @@ function App() {
                     setFilters={setFilters}
                     availableStyles={availableStyles}
                     availableArchitects={availableArchitects}
+                    availableBuildingTypes={availableBuildingTypes}
                 />
             )}
         </div>
