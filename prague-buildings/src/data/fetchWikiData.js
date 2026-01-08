@@ -34,7 +34,8 @@ WHERE {
       wd:Q1021645    # office building
       wd:Q19844914   # university building
       wd:Q3950       # villa
-      #wd:Q41176      # building (generic)
+      wd:Q11755880   # residential building
+      #wd:Q41176     # building (generic)
   }
   
   # Interesting architectural styles for Prague
