@@ -107,7 +107,7 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
                 {building.styles.length > 0 && (
                     <div className="filter-row">
                         <p><b>Style:</b></p>
-                        <div className="pill-container">
+                        <div>
                             {building.styles.map(style => (
                                 <FilterPill
                                     key={style}
@@ -126,7 +126,7 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
                 {building.architects.length > 0 && (
                     <div className="filter-row">
                         <p><b>Architect:</b></p>
-                        <div className="pill-container">
+                        <div>
                             {building.architects.map(architect => (
                                 <FilterPill
                                     key={architect}

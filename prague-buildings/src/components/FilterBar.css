@@ -1,7 +1,7 @@
 .filter-bar {
-    margin-bottom: 20px;
     display: flex;
     gap: 15px;
+    height: 100%;
 }
 
 .filter-group {
@@ -15,25 +15,34 @@
     width: 40%;
 }
 
-.filter-group.architects {
-    width: 30%;
-}
-
+.filter-group.architects,
 .filter-group.building-types {
     width: 30%;
 }
 
 .filter-group label {
     font-weight: 500;
-    margin-bottom: 8px;
 }
 
 .filter-group select {
     width: 100%;
-    margin-bottom: 5px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border-color: #cfcfda;
+    border-width: 1px;
+    background-color: #e9f7f1;
+}
+
+.filter-group select option {
+    color: #1f5c48;
+}
+
+.filter-group select:focus {
+    border-color: #1f5c48;
 }
 
 .pill-container {
     display: flex;
     flex-wrap: wrap;
+    margin-top: 5px;
 }

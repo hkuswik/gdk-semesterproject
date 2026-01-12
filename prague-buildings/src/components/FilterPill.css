@@ -11,10 +11,6 @@
     gap: 6px;
 }
 
-.pill:hover {
-    background: #aeaeae;
-}
-
 .pill-style {
     background: #f1ecff;
     color: #3b2f7a;
