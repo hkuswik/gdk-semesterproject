@@ -10,7 +10,7 @@ export function normalizeBuildings(sparqlJson) {
         heritage: normalizeHeritage(b.heritageLabel?.value),
         coords: b.coords?.value ?? null,
         year: b.inception?.value
-            ? new Date(b.inception.value).getFullYear()
+            ? Number(b.inception.value.slice(0, 4))
             : null,
         architects: b.architects?.value
             ? b.architects.value.split(", ")
