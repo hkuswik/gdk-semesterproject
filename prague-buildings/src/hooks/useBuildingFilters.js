@@ -4,36 +4,29 @@ function hasHeritage(b) {
     return Boolean(b.heritage);
 }
 
-function matchesFilters(b, filters, ignoreKey) {
-    if (ignoreKey !== "heritageOnly") {
-        if (filters.heritageOnly && !hasHeritage(b)) {
+function buildingMatchesFilters(b, filters, ignore = null) {
+    if (ignore !== "heritageOnly" && filters.heritageOnly && !b.heritage) {
+        return false;
+    }
+
+    if (ignore !== "styles" && filters.styles.length > 0) {
+        if (!filters.styles.some(s =>
+            s === "__NO_STYLE__"
+                ? b.styles.length === 0
+                : b.styles.includes(s)
+        )) return false;
+    }
+
+    if (ignore !== "architects" && filters.architects.length > 0) {
+        if (!filters.architects.some(a => b.architects.includes(a))) {
             return false;
         }
     }
 
-    if (ignoreKey !== "styles") {
-        if (
-            filters.styles.length > 0 &&
-            !filters.styles.some(s =>
-                s === "__NO_STYLE__"
-                    ? b.styles.length === 0
-                    : b.styles.includes(s)
-            )
-        ) return false;
-    }
-
-    if (ignoreKey !== "architects") {
-        if (
-            filters.architects.length > 0 &&
-            !filters.architects.some(a => b.architects.includes(a))
-        ) return false;
-    }
-
-    if (ignoreKey !== "buildingTypes") {
-        if (
-            filters.buildingTypes.length > 0 &&
-            !filters.buildingTypes.includes(b.type)
-        ) return false;
+    if (ignore !== "buildingTypes" && filters.buildingTypes.length > 0) {
+        if (!filters.buildingTypes.includes(b.type)) {
+            return false;
+        }
     }
 
     return true;
@@ -47,31 +40,10 @@ export function useBuildingFilters(
 ) {
 
     // filter buildings
-    const filteredBuildings = useMemo(() => {
-        return buildings.filter(b => {
-            if (filters.heritageOnly && !hasHeritage(b)) {
-                return false;
-            }
-
-            const matchesStyle =
-                filters.styles.length === 0 ||
-                filters.styles.some(s =>
-                    s === "__NO_STYLE__"
-                        ? b.styles.length === 0
-                        : b.styles.includes(s)
-                );
-
-            const matchesArchitect =
-                filters.architects.length === 0 ||
-                filters.architects.some(a => b.architects.includes(a));
-
-            const matchesBuildingType =
-                filters.buildingTypes.length === 0 ||
-                filters.buildingTypes.includes(b.type);
-
-            return matchesStyle && matchesArchitect && matchesBuildingType;
-        });
-    }, [buildings, filters]);
+    const filteredBuildings = useMemo(
+        () => buildings.filter(b => buildingMatchesFilters(b, filters)),
+        [buildings, filters]
+    );
 
     // currently shown building
     const selectedBuilding = useMemo(() => {
@@ -117,7 +89,7 @@ export function useBuildingFilters(
     // STYLES
     const buildingsForStyleOptions = useMemo(() => {
         return buildings.filter(b =>
-            matchesFilters(b, filters, "styles")
+            buildingMatchesFilters(b, filters, "styles")
         );
     }, [buildings, filters]);
 
@@ -142,7 +114,7 @@ export function useBuildingFilters(
     // ARCHITECTS
     const buildingsForArchitectOptions = useMemo(() => {
         return buildings.filter(b =>
-            matchesFilters(b, filters, "architects")
+            buildingMatchesFilters(b, filters, "architects")
         );
     }, [buildings, filters]);
 
@@ -159,7 +131,7 @@ export function useBuildingFilters(
     // BUILDING TYPE
     const buildingsForTypeOptions = useMemo(() => {
         return buildings.filter(b =>
-            matchesFilters(b, filters, "buildingTypes")
+            buildingMatchesFilters(b, filters, "buildingTypes")
         );
     }, [buildings, filters]);
 
@@ -175,7 +147,7 @@ export function useBuildingFilters(
 
     // HERITAGE
     const heritageAvailable = useMemo(() => {
-        return buildings.some(b => hasHeritage(b) && matchesFilters(b, filters, "heritageOnly"));
+        return buildings.some(b => hasHeritage(b) && buildingMatchesFilters(b, filters, "heritageOnly"));
     }, [buildings, filters]);
 
     return {
