@@ -52,30 +52,14 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function toggleStyle(style, filters, setFilters) {
+function toggleFilterValue(key, value, setFilters, single = false) {
     setFilters(f => ({
         ...f,
-        styles: f.styles.includes(style)
-            ? f.styles.filter(s => s !== style)
-            : [...f.styles, style],
-    }));
-}
-
-function toggleArchitect(architect, filters, setFilters) {
-    setFilters(f => ({
-        ...f,
-        architects: f.architects.includes(architect)
-            ? f.architects.filter(a => a !== architect)
-            : [...f.architects, architect],
-    }));
-}
-
-function toggleBuildingType(type, filters, setFilters) {
-    setFilters(f => ({
-        ...f,
-        buildingTypes: f.buildingTypes.includes(type)
-            ? f.buildingTypes.filter(b => b !== type)
-            : [type],
+        [key]: single
+            ? (f[key].includes(value) ? [] : [value])
+            : f[key].includes(value)
+                ? f[key].filter(v => v !== value)
+                : [...f[key], value],
     }));
 }
 
@@ -114,9 +98,7 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
                                     label={style}
                                     variant="style"
                                     selected={filters.styles.includes(style)}
-                                    onClick={() =>
-                                        toggleStyle(style, filters, setFilters)
-                                    }
+                                    onClick={() => toggleFilterValue("styles", style, setFilters)}
                                 />
                             ))}
                         </div>
@@ -133,9 +115,7 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
                                     label={architect}
                                     variant="architect"
                                     selected={filters.architects.includes(architect)}
-                                    onClick={() =>
-                                        toggleArchitect(architect, filters, setFilters)
-                                    }
+                                    onClick={() => toggleFilterValue("architects", architect, setFilters)}
                                 />
                             ))}
                         </div>
@@ -149,9 +129,7 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
                             label={capitalize(building.type)}
                             variant="building-type"
                             selected={filters.buildingTypes.includes(building.type)}
-                            onClick={() =>
-                                toggleBuildingType(building.type, filters, setFilters)
-                            }
+                            onClick={() => toggleFilterValue("buildingTypes", building.type, setFilters, true)}
                         />
                     </div>
                 )}
