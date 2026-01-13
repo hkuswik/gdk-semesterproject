@@ -1,4 +1,5 @@
 import { normalizeStyle } from "./styleNormalizer.js";
+import { normalizeHeritage } from "./heritageNormalizer.js";
 
 export function normalizeBuildings(sparqlJson) {
     return sparqlJson.results.bindings.map(b => ({
@@ -6,7 +7,7 @@ export function normalizeBuildings(sparqlJson) {
         label: b.buildingLabel?.value ?? "Nameless Building",
         description: b.buildingDescription?.value ?? "",
         type: b.type?.value ?? "",
-        heritage: b.heritageLabel?.value ?? null,
+        heritage: normalizeHeritage(b.heritageLabel?.value),
         coords: b.coords?.value ?? null,
         year: b.inception?.value
             ? new Date(b.inception.value).getFullYear()
