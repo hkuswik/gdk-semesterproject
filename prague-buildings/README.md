@@ -6,26 +6,28 @@ This document describes the technical implementation of the **Prague Architectur
 
 ## Project Structure
 
-prague-buildings/
-├── src/
-│ ├── components/
-│ │ ├── BuildingDetailsCard.jsx
-│ │ ├── FilterBar.jsx
-│ │ ├── FilterPill.jsx
-│ │ └── MapView.jsx
-│ ├── data/
-│ │ ├── fetchWikidata.js
-│ │ ├── normalizeBuildings.js
-│ │ ├── styleNormalizer.js
-│ │ └── heritageNormalizer.js
-│ ├── hooks/
-│ │ └── useBuildingFilters.js
-│ ├── App.jsx
-│ └── main.jsx
-├── public/
-│ └── icons/...
-├── package.json
-└── vite.config.js
+- prague-buildings/
+  - public/
+    - icons/...
+  - src/
+    - components/
+      - BuildingDetailsCard.jsx
+      - FilterBar.jsx
+      - FilterPill.jsx
+      - MapView.jsx
+    - data/
+      - fetchWikidata.js
+      - geoUtils.js
+      - heritageNormalizer.js
+      - leafletIcons.js
+      - normalizeBuildings.js
+      - styleNormalizer.js
+    - hooks/
+      - useBuildingFilters.js
+    - App.jsx
+    - main.jsx 
+  - package.json 
+  - vite.config.js
 
 ---
 
@@ -43,12 +45,12 @@ prague-buildings/
 
 - `fetchWikidata.js` contains the SPARQL query to fetch buildings in Prague.
 - Query retrieves:
-    - Coordinates (`P625`)
-    - Images (`P18`)
-    - Architects (`P84`)
-    - Architectural styles (`P149`)
-    - Heritage status (`P1435`)
-    - Construction year (`P571`)
+    - Coordinates
+    - Images
+    - Architects
+    - Architectural styles
+    - Heritage status
+    - Construction year
 - Query uses:
     - `OPTIONAL` statements for missing data
     - `FILTER` to select architecturally interesting or historic buildings
@@ -90,7 +92,7 @@ prague-buildings/
 - **BuildingDetailsCard.jsx**
     - Displays building info in a card
     - Allows toggling filters directly from card
-    - Uses `FilterPill` to select more filters and keep filter-design consistent
+    - Uses `FilterPill` to keep filter-design consistent
     - Navigates between buildings
 
 ---
