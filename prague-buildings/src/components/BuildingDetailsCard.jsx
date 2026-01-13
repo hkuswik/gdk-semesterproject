@@ -93,13 +93,13 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
 
             <div className="building-card">
                 <div>
+                    <h2>{(building.label)}</h2>
                     {building.image && (
                         <img
                             src={building.image}
                             alt={building.label}
                         />
                     )}
-                    <h2>{(building.label)}</h2>
                 </div>
 
                 {<p><b>Year:</b> {getYearLabel(building)}</p>}
