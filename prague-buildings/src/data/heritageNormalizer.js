@@ -7,6 +7,10 @@ const HERITAGE_MAP = [
         match: /part of cultural heritage site in the czech republic/i,
         short: "Part of cultural heritage site",
     },
+    {
+        match: /part of national cultural heritage site in the czech republic/i,
+        short: "Part of national cultural heritage site",
+    }
 ];
 
 export function normalizeHeritage(label) {

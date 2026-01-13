@@ -17,6 +17,7 @@ function App() {
         styles: [],
         architects: [],
         buildingTypes: [],
+        heritageOnly: false,
     });
 
     useEffect(() => {
@@ -35,6 +36,7 @@ function App() {
         availableStyles,
         availableArchitects,
         availableBuildingTypes,
+        heritageAvailable,
         selectedBuilding,
         selectedIndex,
         selectPrev,
@@ -64,6 +66,7 @@ function App() {
                     availableStyles={availableStyles}
                     availableArchitects={availableArchitects}
                     availableBuildingTypes={availableBuildingTypes}
+                    heritageAvailable={heritageAvailable}
                 />
             )}
         </div>

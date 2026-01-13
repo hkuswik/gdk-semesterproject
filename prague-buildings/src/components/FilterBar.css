@@ -2,9 +2,12 @@
     display: flex;
     gap: 15px;
     height: 100%;
+    width: 100%;
 }
 
 .filter-group {
+    display: flex;
+    flex-direction: column;
     background: white;
     border-radius: 8px;
     padding: 8px;
@@ -15,13 +18,44 @@
     width: 40%;
 }
 
-.filter-group.architects,
+.filter-group.architects {
+    width: 25%;
+}
+
+.types-heritage {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 35%;
+    height: 100%;
+}
+
 .filter-group.building-types {
-    width: 30%;
+    height: 70%;
+}
+
+.filter-group.heritage {
+    height: 20%;
 }
 
 .filter-group label {
     font-weight: 500;
+    font-size: 14px;
+}
+
+.filter-group.heritage label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.filter-group.heritage span {
+    cursor: pointer;
+}
+
+.filter-group.heritage input:disabled + span {
+    opacity: 0.5;
+    cursor: default;
 }
 
 .filter-group select {

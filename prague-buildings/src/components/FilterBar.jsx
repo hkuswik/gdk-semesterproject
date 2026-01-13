@@ -5,14 +5,7 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-/**
- * styles
- * architects
- * building types
- * heritage?
- * --> generate options dynamically from data
- */
-export default function FilterBar({ filters, setFilters, availableStyles, availableArchitects, availableBuildingTypes }) {
+export default function FilterBar({ filters, setFilters, availableStyles, availableArchitects, availableBuildingTypes, heritageAvailable}) {
 
     return (
         <div className="filter-bar">
@@ -101,31 +94,51 @@ export default function FilterBar({ filters, setFilters, availableStyles, availa
                 )}
             </div>
 
-            {/* ---------- BUILDING TYPE ---------- */}
-            <div className="filter-group building-types">
-                <label>Building Types</label>
+            <div className="types-heritage">
+                {/* ---------- BUILDING TYPE ---------- */}
+                <div className="filter-group building-types">
+                    <label>Building Types</label>
 
-                <div className="pill-container">
-                    {availableBuildingTypes.map(buildingType => {
-                        const isSelected = filters.buildingTypes.includes(buildingType);
+                    <div className="pill-container">
+                        {availableBuildingTypes.map(buildingType => {
+                            const isSelected = filters.buildingTypes.includes(buildingType);
 
-                        return (
-                            <FilterPill
-                                key={buildingType}
-                                label={capitalize(buildingType)}
-                                variant="building-type"
-                                selected={isSelected}
-                                onClick={() =>
-                                    setFilters(f => ({
-                                        ...f,
-                                        buildingTypes: isSelected
-                                            ? f.buildingTypes.filter(b => b !== buildingType)
-                                            : [...f.buildingTypes, buildingType],
-                                    }))
-                                }
-                            />
-                        );
-                    })}
+                            return (
+                                <FilterPill
+                                    key={buildingType}
+                                    label={capitalize(buildingType)}
+                                    variant="building-type"
+                                    selected={isSelected}
+                                    onClick={() =>
+                                        setFilters(f => ({
+                                            ...f,
+                                            buildingTypes: isSelected
+                                                ? f.buildingTypes.filter(b => b !== buildingType)
+                                                : [...f.buildingTypes, buildingType],
+                                        }))
+                                    }
+                                />
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* ---------- HERITAGE ---------- */}
+                <div className="filter-group heritage">
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={filters.heritageOnly}
+                            disabled={!heritageAvailable}
+                            onChange={e =>
+                                setFilters(f => ({
+                                    ...f,
+                                    heritageOnly: e.target.checked,
+                                }))
+                            }
+                        />
+                        <span>Only buildings with heritage status</span>
+                    </label>
                 </div>
             </div>
         </div>

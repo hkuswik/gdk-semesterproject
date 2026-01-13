@@ -1,6 +1,16 @@
 import { useMemo } from "react";
 
+function hasHeritage(b) {
+    return Boolean(b.heritage);
+}
+
 function matchesFilters(b, filters, ignoreKey) {
+    if (ignoreKey !== "heritageOnly") {
+        if (filters.heritageOnly && !hasHeritage(b)) {
+            return false;
+        }
+    }
+
     if (ignoreKey !== "styles") {
         if (
             filters.styles.length > 0 &&
@@ -39,14 +49,17 @@ export function useBuildingFilters(
     // filter buildings
     const filteredBuildings = useMemo(() => {
         return buildings.filter(b => {
+            if (filters.heritageOnly && !hasHeritage(b)) {
+                return false;
+            }
+
             const matchesStyle =
                 filters.styles.length === 0 ||
-                filters.styles.some(s => {
-                    if (s === "__NO_STYLE__") {
-                        return b.styles.length === 0;
-                    }
-                    return b.styles.includes(s);
-                });
+                filters.styles.some(s =>
+                    s === "__NO_STYLE__"
+                        ? b.styles.length === 0
+                        : b.styles.includes(s)
+                );
 
             const matchesArchitect =
                 filters.architects.length === 0 ||
@@ -160,11 +173,17 @@ export function useBuildingFilters(
         return Array.from(set).sort();
     }, [buildingsForTypeOptions]);
 
+    // HERITAGE
+    const heritageAvailable = useMemo(() => {
+        return buildings.some(b => hasHeritage(b) && matchesFilters(b, filters, "heritageOnly"));
+    }, [buildings, filters]);
+
     return {
         filteredBuildings,
         availableStyles,
         availableArchitects,
         availableBuildingTypes,
+        heritageAvailable,
         selectedBuilding,
         selectedIndex,
         selectPrev,
