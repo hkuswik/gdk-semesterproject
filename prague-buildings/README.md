@@ -51,12 +51,17 @@ This document describes the technical implementation of the **Prague Architectur
     - Architectural styles
     - Heritage status
     - Construction year
+- Buildings are selected based on several criteria defined in the SPARQL query:
+  - Location within Prague
+  - Presence of geographic coordinates
+  - Availability of an image (Wikidata property P18)
+  - Belonging to selected building types
+  - Historical relevance (construction before 1950) or heritage protection or interesting architecture
 - Query uses:
     - `OPTIONAL` statements for missing data
     - `FILTER` to select architecturally interesting or historic buildings
     - `VALUES` to limit building types and styles
     - `GROUP_CONCAT` to combine multiple architects or styles
-
 - Data is returned as **JSON** and normalized in `normalizeBuildings.js`:
     - Splits multiple styles/architects
     - Normalizes style names (`styleNormalizer.js`)

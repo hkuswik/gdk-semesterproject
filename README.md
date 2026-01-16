@@ -2,9 +2,11 @@
 
 ## Prague Architectural Explorer
 
-This project is a semester assignment for the Graph Data course, demonstrating the consumption of **Linked Open Data** in a practical web application. It visualizes historical buildings in **Prague**, allowing users to explore architectural styles, architects, building types, and heritage status interactively.
+This project is a semester assignment for the GDK course, demonstrating the consumption of **Linked Open Data** (Wikidata) in a practical web application. It visualizes historical & architecturally interesting buildings in **Prague**, allowing users to explore architectural styles, architects, building types, and heritage status interactively.
 
 ![AppScreenshot](/prague-buildings/public/AppScreenshot.png)
+
+Note: The application does not aim to display all buildings in Prague. Instead, it visualizes a curated subset of buildings selected based on architectural relevance, data completeness, and usability considerations (e.g., availability of images and geographic coordinates).
 
 ---
 
@@ -17,11 +19,13 @@ This project is a semester assignment for the Graph Data course, demonstrating t
     - Building type
     - Heritage status
 - Detail card with:
+    - Building name
     - Building image
     - Year of construction
     - Styles and architects
+    - Building type
     - Heritage designation
-- Navigation between buildings directly from the detail card
+- Navigation between buildings
 - Data sourced from **Wikidata**, leveraging SPARQL queries
 
 ---
@@ -36,10 +40,6 @@ This project is a semester assignment for the Graph Data course, demonstrating t
     - Images
     - Heritage status
     - Construction year
-- Demonstrates the use of **graph data principles**:
-    - Each building, architect, and style is an **entity with a URI**
-    - SPARQL queries aggregate and normalize data for visualization
-    - Semantic linking preserved in URIs (can be extended to other datasets)
 
 ---
 
