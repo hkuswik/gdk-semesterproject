@@ -13,6 +13,7 @@ function App() {
     const [buildings, setBuildings] = useState([]);
     const [selectedBuildingId, setSelectedBuildingId] = useState(null);
 
+    // selected filter state
     const [filters, setFilters] = useState({
         styles: [],
         architects: [],
@@ -23,7 +24,9 @@ function App() {
     useEffect(() => {
         async function load() {
             setLoading(true);
+            // SPARQL request to Wikidata for buildings
             const data = await fetchBuildings();
+            // convert SPARQL JSON to app model
             setBuildings(normalizeBuildings(data));
             setLoading(false);
         }
@@ -49,10 +52,13 @@ function App() {
     );
 
     return (<div className="app">
+        {/* header with icon and title */}
         <div className="header">
             <img src="icons/prague-icon.png" alt="Prague Icon"/>
             <h1>Prague Architectural Explorer</h1>
         </div>
+
+        {/* filter bar */}
         <div className="filters">
             {loading ? (
                 <div className="spinner-container">
@@ -70,9 +76,12 @@ function App() {
                 />
             )}
         </div>
+
+        {/* main content: map + details */}
         <div className="main-content">
             {loading ? (
                 <>
+                    {/* placeholders while fetching */}
                     <div className="skeleton map-skeleton"/>
                     <div className="building-card-wrapper">
                         <button className="nav-arrow" disabled>◀</button>
@@ -82,11 +91,13 @@ function App() {
                 </>
             ) : (
                 <>
+                    {/* leaflet-based map with markers */}
                     <MapView
                         buildings={filteredBuildings}
                         selectedBuildingId={selectedBuilding?.id || null}
                         onSelectBuilding={setSelectedBuildingId}
                     />
+                    {/* details panel for current selection */}
                     {selectedBuilding && (
                         <BuildingDetailsCard
                             building={selectedBuilding}

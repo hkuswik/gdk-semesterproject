@@ -1,3 +1,5 @@
+// fetchBuildings executes a SPARQL query against Wikidata's endpoint
+// returning JSON results for Prague buildings matching our criteria
 export async function fetchBuildings() {
     const endpointUrl = "https://query.wikidata.org/sparql";
 

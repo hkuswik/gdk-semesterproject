@@ -4,11 +4,19 @@ function hasHeritage(b) {
     return Boolean(b.heritage);
 }
 
+/**
+ * Checks whether a building matches the currently active filters.
+ *
+ * The 'ignore' parameter allows evaluating filter options independently
+ * (e.g., to compute available styles without applying the style filter itself)
+ */
 function buildingMatchesFilters(b, filters, ignore = null) {
+    // heritage filter (optional)
     if (ignore !== "heritageOnly" && filters.heritageOnly && !b.heritage) {
         return false;
     }
 
+    // architectural styles (supports explicit "no style assigned" case)
     if (ignore !== "styles" && filters.styles.length > 0) {
         if (!filters.styles.some(s =>
             s === "__NO_STYLE__"
@@ -17,12 +25,14 @@ function buildingMatchesFilters(b, filters, ignore = null) {
         )) return false;
     }
 
+    // architects filter
     if (ignore !== "architects" && filters.architects.length > 0) {
         if (!filters.architects.some(a => b.architects.includes(a))) {
             return false;
         }
     }
 
+    // building type filter
     if (ignore !== "buildingTypes" && filters.buildingTypes.length > 0) {
         if (!filters.buildingTypes.includes(b.type)) {
             return false;
@@ -32,31 +42,31 @@ function buildingMatchesFilters(b, filters, ignore = null) {
     return true;
 }
 
-export function useBuildingFilters(
-    buildings,
-    filters,
-    selectedBuildingId,
-    setSelectedBuildingId
-) {
-
-    // filter buildings
+/**
+ * Custom hook that:
+ * - filters buildings based on user-selected criteria
+ * - derives available filter options dynamically
+ * - manages navigation through the filtered result set
+ */
+export function useBuildingFilters(buildings, filters, selectedBuildingId, setSelectedBuildingId) {
+    // main filtered building list used for map markers and navigation.
     const filteredBuildings = useMemo(
         () => buildings.filter(b => buildingMatchesFilters(b, filters)),
         [buildings, filters]
     );
 
-    // currently shown building
+    /**
+     * Currently selected building.
+     * Falls back to the first filtered building if the previous selection is no longer valid due to filter changes
+     */
     const selectedBuilding = useMemo(() => {
         if (filteredBuildings.length === 0) return null;
 
-        // search building the user clicked on
         const found = filteredBuildings.find(b => b.id === selectedBuildingId);
-
-        // FALLBACK: if ID isn't in list anymore, take first building in filtered list
         return found || filteredBuildings[0];
     }, [filteredBuildings, selectedBuildingId]);
 
-    // iterate over buildings
+    // index of the selected building inside the filtered list used for prev / next navigation (cyclic)
     const selectedIndex = useMemo(() => {
         if (!selectedBuilding) return -1;
         return filteredBuildings.findIndex(
@@ -86,13 +96,24 @@ export function useBuildingFilters(
         setSelectedBuildingId(filteredBuildings[nextIndex].id);
     };
 
-    // STYLES
+    /* ============================
+       STYLE FILTER OPTIONS
+       ============================ */
+
+    /**
+     * Buildings used to compute available style options.
+     * All filters are applied except the style filter itself
+     */
     const buildingsForStyleOptions = useMemo(() => {
         return buildings.filter(b =>
             buildingMatchesFilters(b, filters, "styles")
         );
     }, [buildings, filters]);
 
+    /**
+     * Extract distinct architectural styles from the current result set.
+     * Adds a special "__NO_STYLE__" option if applicable
+     */
     const availableStyles = useMemo(() => {
         const set = new Set();
         let hasNoStyle = false;
@@ -111,13 +132,18 @@ export function useBuildingFilters(
         return result;
     }, [buildingsForStyleOptions]);
 
-    // ARCHITECTS
+    /* ============================
+       ARCHITECT FILTER OPTIONS
+       ============================ */
+
+    // buildings used to compute available architect options
     const buildingsForArchitectOptions = useMemo(() => {
         return buildings.filter(b =>
             buildingMatchesFilters(b, filters, "architects")
         );
     }, [buildings, filters]);
 
+    // extract distinct architects from the current result set
     const availableArchitects = useMemo(() => {
         const set = new Set();
 
@@ -128,13 +154,18 @@ export function useBuildingFilters(
         return Array.from(set).sort();
     }, [buildingsForArchitectOptions]);
 
-    // BUILDING TYPE
+    /* ============================
+       BUILDING TYPE FILTER OPTIONS
+       ============================ */
+
+    // buildings used to compute available building type options
     const buildingsForTypeOptions = useMemo(() => {
         return buildings.filter(b =>
             buildingMatchesFilters(b, filters, "buildingTypes")
         );
     }, [buildings, filters]);
 
+    // extract distinct building types from the current result set
     const availableBuildingTypes = useMemo(() => {
         const set = new Set();
 
@@ -145,7 +176,11 @@ export function useBuildingFilters(
         return Array.from(set).sort();
     }, [buildingsForTypeOptions]);
 
-    // HERITAGE
+    /* ============================
+       HERITAGE AVAILABILITY
+       ============================ */
+
+    // determines whether the heritage filter is meaningful in the current context
     const heritageAvailable = useMemo(() => {
         return buildings.some(b => hasHeritage(b) && buildingMatchesFilters(b, filters, "heritageOnly"));
     }, [buildings, filters]);
