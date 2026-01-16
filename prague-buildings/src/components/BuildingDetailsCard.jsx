@@ -1,6 +1,7 @@
 import "./BuildingDetailsCard.css";
 import "./FilterBar.css";
 import FilterPill from "./FilterPill.jsx";
+import { useEffect, useState } from "react";
 
 const STYLE_ERA_MAP = {
     "Art Nouveau": "1895–1914",
@@ -64,6 +65,13 @@ function toggleFilterValue(key, value, setFilters, single = false) {
 }
 
 export default function BuildingDetailsCard({ building, onPrev, onNext, selectedIndex, buildingsCount, filters, setFilters }) {
+    const [imageLoaded, setImageLoaded] = useState(false);
+
+    // reset img loading state as soon as new building is selected
+    useEffect(() => {
+        setImageLoaded(false);
+    }, [building.image]);
+
     if (!building) return null;
 
     return (
@@ -78,10 +86,18 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
             <div className="building-card">
                 <div>
                     <h2>{(building.label)}</h2>
+
+                    {!imageLoaded && (
+                        <div className="image-skeleton" />
+                    )}
                     {building.image && (
                         <img
                             src={building.image}
                             alt={building.label}
+                            onLoad={() => setImageLoaded(true)}
+                            style={{
+                                display: imageLoaded ? "block" : "none",
+                            }}
                         />
                     )}
                 </div>
@@ -137,7 +153,7 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
                 <div className="last-row">
                     {building.heritage ? (
                         <p><b>Heritage:</b> {building.heritage}</p>
-                    ): <div></div>}
+                    ) : <div></div>}
                     <p className="counter">
                         {selectedIndex + 1} / {buildingsCount}
                     </p>
