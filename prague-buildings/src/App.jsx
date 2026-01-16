@@ -50,7 +50,7 @@ function App() {
 
     return (<div className="app">
         <div className="header">
-            <img src="/icons/prague-icon.png" alt="Prague Icon"/>
+            <img src="icons/prague-icon.png" alt="Prague Icon"/>
             <h1>Prague Architectural Explorer</h1>
         </div>
         <div className="filters">
