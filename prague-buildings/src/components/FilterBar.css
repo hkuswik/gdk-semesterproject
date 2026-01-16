@@ -10,8 +10,10 @@
     flex-direction: column;
     background: white;
     border-radius: 8px;
+    border: #d6d6dc solid 1px;
     padding: 8px;
     height: 100%;
+    box-shadow: 0 8px 24px rgba(149, 149, 149, 0.2);
 }
 
 .filter-group.styles {
@@ -31,7 +33,7 @@
 }
 
 .filter-group.building-types {
-    height: 70%;
+    height: 75%;
 }
 
 .filter-group.heritage {
