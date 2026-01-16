@@ -53,4 +53,4 @@ The technical implementation of this project, including architecture, components
 
 The application can be hosted using **GitHub Pages**:
 
-- [GitHub Pages link when deployed]()
+- [GitHub Pages Link](https://hkuswik.github.io/gdk-semesterproject/)
