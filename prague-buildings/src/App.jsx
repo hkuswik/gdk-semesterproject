@@ -54,8 +54,14 @@ function App() {
     return (<div className="app">
         {/* header with icon and title */}
         <div className="header">
-            <img src="icons/prague-icon.png" alt="Prague Icon"/>
-            <h1>Prague Architectural Explorer</h1>
+            <div className="header-content">
+                <img src="icons/prague-icon.png" alt="Prague Icon"/>
+                <h1>Prague Architectural Explorer</h1>
+            </div>
+            <div className="header-content">
+                <p>uses</p>
+                <img src="icons/wikidata-logo.png" alt="Wikidata Logo"/>
+            </div>
         </div>
 
         {/* filter bar */}
