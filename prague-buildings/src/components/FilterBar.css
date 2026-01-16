@@ -38,6 +38,8 @@
 
 .filter-group.heritage {
     height: 20%;
+    display: flex;
+    justify-content: center;
 }
 
 .filter-group label {
@@ -80,5 +82,7 @@
 .pill-container {
     display: flex;
     flex-wrap: wrap;
+    overflow-y: auto;
+    min-height: 0;
     margin-top: 5px;
 }

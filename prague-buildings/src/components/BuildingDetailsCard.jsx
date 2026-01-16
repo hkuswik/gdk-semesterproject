@@ -84,7 +84,7 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
             </button>
 
             <div className="building-card">
-                <div>
+                <div className="card-top">
                     <h2>{(building.label)}</h2>
 
                     {!imageLoaded && (
@@ -102,61 +102,63 @@ export default function BuildingDetailsCard({ building, onPrev, onNext, selected
                     )}
                 </div>
 
-                {<p><b>Year:</b> {getYearLabel(building)}</p>}
+                <div className="building-details">
+                    {<p><b>Year:</b> {getYearLabel(building)}</p>}
 
-                {building.styles.length > 0 && (
-                    <div className="filter-row">
-                        <p><b>Style:</b></p>
-                        <div>
-                            {building.styles.map(style => (
-                                <FilterPill
-                                    key={style}
-                                    label={style}
-                                    variant="style"
-                                    selected={filters.styles.includes(style)}
-                                    onClick={() => toggleFilterValue("styles", style, setFilters)}
-                                />
-                            ))}
+                    {building.styles.length > 0 && (
+                        <div className="filter-row">
+                            <p><b>Style:</b></p>
+                            <div>
+                                {building.styles.map(style => (
+                                    <FilterPill
+                                        key={style}
+                                        label={style}
+                                        variant="style"
+                                        selected={filters.styles.includes(style)}
+                                        onClick={() => toggleFilterValue("styles", style, setFilters)}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {building.architects.length > 0 && (
-                    <div className="filter-row">
-                        <p><b>Architect:</b></p>
-                        <div>
-                            {building.architects.map(architect => (
-                                <FilterPill
-                                    key={architect}
-                                    label={architect}
-                                    variant="architect"
-                                    selected={filters.architects.includes(architect)}
-                                    onClick={() => toggleFilterValue("architects", architect, setFilters)}
-                                />
-                            ))}
+                    {building.architects.length > 0 && (
+                        <div className="filter-row">
+                            <p><b>Architect:</b></p>
+                            <div>
+                                {building.architects.map(architect => (
+                                    <FilterPill
+                                        key={architect}
+                                        label={architect}
+                                        variant="architect"
+                                        selected={filters.architects.includes(architect)}
+                                        onClick={() => toggleFilterValue("architects", architect, setFilters)}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                    </div>
-                )}
+                    )}
 
-                {building.type && (
-                    <div className="filter-row">
-                        <p><b>Type:</b></p>
-                        <FilterPill
-                            label={capitalize(building.type)}
-                            variant="building-type"
-                            selected={filters.buildingTypes.includes(building.type)}
-                            onClick={() => toggleFilterValue("buildingTypes", building.type, setFilters, true)}
-                        />
-                    </div>
-                )}
+                    {building.type && (
+                        <div className="filter-row">
+                            <p><b>Type:</b></p>
+                            <FilterPill
+                                label={capitalize(building.type)}
+                                variant="building-type"
+                                selected={filters.buildingTypes.includes(building.type)}
+                                onClick={() => toggleFilterValue("buildingTypes", building.type, setFilters, true)}
+                            />
+                        </div>
+                    )}
 
-                <div className="last-row">
-                    {building.heritage ? (
-                        <p><b>Heritage:</b> {building.heritage}</p>
-                    ) : <div></div>}
-                    <p className="counter">
-                        {selectedIndex + 1} / {buildingsCount}
-                    </p>
+                    <div className="last-row">
+                        {building.heritage ? (
+                            <p><b>Heritage:</b> {building.heritage}</p>
+                        ) : <div></div>}
+                        <p className="counter">
+                            {selectedIndex + 1} / {buildingsCount}
+                        </p>
+                    </div>
                 </div>
             </div>
 
