@@ -92,7 +92,7 @@ This document describes the technical implementation of the **Prague Architectur
 
 - **MapView.jsx**
     - Shows building markers on a Leaflet map
-    - Syncs selection with detail card
+    - Syncs selection with details card
 
 - **BuildingDetailsCard.jsx**
     - Displays building info in a card
@@ -104,11 +104,11 @@ This document describes the technical implementation of the **Prague Architectur
 
 ## Styling & UX
 
-- Responsive layout with map and detail card side by side
+- Responsive layout with map and details card side by side
 - Skeleton loaders while fetching data
 - Clear filter hierarchy:
     - Styles → Architects → Building Types → Heritage
-- Detail card includes year, style, architect, type and heritage
+- Details card includes year, style, architect, type and heritage
 
 ---
 

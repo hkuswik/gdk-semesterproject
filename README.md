@@ -18,7 +18,7 @@ Note: The application does not aim to display all buildings in Prague. Instead, 
     - Architect
     - Building type
     - Heritage status
-- Detail card with:
+- Details card with:
     - Building name
     - Building image
     - Year of construction
